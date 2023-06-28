@@ -1,8 +1,9 @@
 Subscription Expiration Detection
 ===============================================================================
 
-This is a simple application that reports on subscriptions no long attached to a topic.  
-This is accomplished by comparing consequtive reports of subscriptions.
+This application reports on subscriptions that are no longer attached to a topic.  
+This is accomplished by comparing consequtive reports of active subscriptions
+taken at an hourly interval.
 
 Overview
 -------------------------------------------------------------------------------
@@ -10,7 +11,7 @@ Overview
 By default, subscriptions expire after 31 days of inactivity (for instance, if there are no active connections, pull requests, or push successes). 
 If subscription expiration policy has been set, subscriptions expire after set duration of inactivity. [1]_  
 
-Currenty (June 2023), the expiration event logged against the topic does not include subscription if the subscriber is from a different project.  To identify these expired subscriptions, 
+Currenty (June 2023), an expiration event logged against the topic does not include subscription if the subscriber is from a different project.  To identify these expired subscriptions, 
 this application periodically lists all the subscriptions in a project and logs the difference between a previous listing.
 
 
@@ -25,10 +26,13 @@ This application uses Cloud Scheduler to trigger a Cloud Function on an hourly b
 
 .. image:: imgs/architecture.png 
 
-Installation Dependencies
-+++++++++++++++++++++++++
+Installation
+-------------------------------------------------------------------------------
 
-Terraform client version 1.5.0 or greater [2]_
+Prerequisites
++++++++++++++
+
+The installation requires the Terraform client (version 1.5.0 or greater [2]_)
 
 Installation Steps 
 ++++++++++++++++++
@@ -49,7 +53,7 @@ Installation Steps
         $ terraform apply -auto-approve
 
 Log Messages
-++++++++++++
+-------------------------------------------------------------------------------
 
 After installation, a log message will be written to Cloud Logging each hour containing an array of topics with 
 the subcriptions that are no longer attached.  Topics with no change will not be listed.
